@@ -1,1 +1,2 @@
 # popular_movies
+This project was created as part of an online course.  The application has two screens. The first page shows popular and top rated movies using the API provided by The Movie DB. When user clicks on a movie poster, a detail page is displayed.To run this app please create your API key following the link: https://www.themoviedb.org/documentation/api. Then save the api key in gradle.properties file using key MOVIE_DB_API_KEY.  Now build and run the application. 
