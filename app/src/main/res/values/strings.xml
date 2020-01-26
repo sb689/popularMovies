@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Popular Movies</string>
+    <string name="network_error_message">An error has occurred. Please try later.</string>
+    <string name="menu_popular">Popular</string>
+    <string name="menu_top_rated">Highest rated</string>
+    <string name="image_view_desc">Shows movie poster</string>
+    <string name="search_popular">popular</string>
+    <string name="search_top_rated">top_rated</string>
+    <string name="intent_package_key">Movie</string>
+</resources>
