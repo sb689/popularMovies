@@ -1,0 +1,14 @@
+<component name="libraryTable">
+  <library name="Gradle: com.elpassion.android.commons:parcelable:0.0.21@aar">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/c075b6df0e0c80e7b3c42dfaa7611e7d/parcelable-0.0.21/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/c075b6df0e0c80e7b3c42dfaa7611e7d/parcelable-0.0.21/res" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.elpassion.android.commons/parcelable/0.0.21/3ba5ee71142d7770f94d2a654ab9cec42fb823a1/parcelable-0.0.21-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.elpassion.android.commons/parcelable/0.0.21/373d7d97bd6de870b70b55664002bef19c58e711/parcelable-0.0.21-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

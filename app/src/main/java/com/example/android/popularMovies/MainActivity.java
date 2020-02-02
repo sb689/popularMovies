@@ -10,6 +10,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -35,12 +36,14 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     private static final int GRID_IMAGE_RATIO = 2;
     private static final String API_KEY = BuildConfig.MOVIE_DB_API_KEY;
     public static int displayScreenHeight = 0;
+    private static final String SAVED_SEARCH_CRITERIA = "searchCriteria";
 
 
     private RecyclerView mRecyclerView;
     private MovieAdapter mMovieAdapter;
     private TextView mErrorMessageTv;
     private ProgressBar mProgressBarPb;
+    private String mSearchCriteria;
 
 
     @Override
@@ -64,7 +67,19 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         mRecyclerView.setAdapter(mMovieAdapter);
         mRecyclerView.setHasFixedSize(true);
 
-        loadMovieData(getString(R.string.search_popular));
+        mSearchCriteria = "popular";
+
+        Log.v(TAG, "::::::::::calling onCreate" );
+
+        if(savedInstanceState != null)
+        {
+            mSearchCriteria = savedInstanceState.getString(SAVED_SEARCH_CRITERIA);
+            Log.v(TAG, "::::::::::received savedInstanceState as : " + mSearchCriteria);
+        }
+        else{
+            Log.v(TAG, "::::::::::savedInstanceState status is null" );
+        }
+        loadMovieData(mSearchCriteria);
 
     }
 
@@ -179,17 +194,34 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
             case R.id.action_popular:
                 //Log.v(TAG,"::::::::::::::popular menu selected");
                 mMovieAdapter.setmMovieList(null);
-                loadMovieData(getString(R.string.search_popular));
+                mSearchCriteria = "popular";
+                loadMovieData(mSearchCriteria);
                 return true;
-            case R.id.action_rated:
+
+                case R.id.action_rated:
                 //Log.v(TAG,"::::::::::::::top rated menu selected");
                 mMovieAdapter.setmMovieList(null);
-                loadMovieData(getString(R.string.search_top_rated));
+                mSearchCriteria = "top_rated";
+                loadMovieData(mSearchCriteria);
                 return true;
-            default: return super.onOptionsItemSelected(item);
+
+                default: return super.onOptionsItemSelected(item);
         }
 
     }
 
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(SAVED_SEARCH_CRITERIA, mSearchCriteria);
+        Log.v(TAG, ":::::::::outState search criteria saved as : " + mSearchCriteria);
+    }
 
+    //    @Override
+//    protected void onSaveInstanceState(Bundle outState) {
+//
+//        super.onSaveInstanceState(outState);
+//        outState.putString(SAVED_SEARCH_CRITERIA, mSearchCriteria);
+//        Log.v(TAG, ":::::::::outState search criteria saved as : " + mSearchCriteria);
+//    }
 }
