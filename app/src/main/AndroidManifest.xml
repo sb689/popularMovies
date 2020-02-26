@@ -16,8 +16,11 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.android.popularMovies.MainActivity" />
+
+
         </activity>
-        <activity android:name="com.example.android.popularMovies.MainActivity">
+        <activity android:name="com.example.android.popularMovies.MainActivity"
+            android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

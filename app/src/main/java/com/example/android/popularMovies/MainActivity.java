@@ -1,12 +1,19 @@
 package com.example.android.popularMovies;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.loader.app.LoaderManager;
+import androidx.loader.content.AsyncTaskLoader;
+import androidx.loader.content.Loader;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
-import android.os.AsyncTask;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 
@@ -15,10 +22,9 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 
-
+import com.example.android.popularMovies.appDatabase.FavoriteMoviesViewModel;
+import com.example.android.popularMovies.databinding.ActivityMainBinding;
 import com.example.android.popularMovies.model.Movie;
 import com.example.android.popularMovies.utilities.JsonUtils;
 import com.example.android.popularMovies.utilities.NetworkUtils;
@@ -27,59 +33,65 @@ import org.json.JSONException;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements MovieAdapter.MovieAdapterClickListener {
+
+public class MainActivity extends AppCompatActivity implements
+        MovieAdapter.MovieAdapterClickListener, LoaderManager.LoaderCallbacks<List<Movie>> {
 
     private static final String TAG = MainActivity.class.getSimpleName();
     private static final int GRID_SPAN_COUNT = 2;
     private static final int GRID_IMAGE_RATIO = 2;
-    private static final String API_KEY = BuildConfig.MOVIE_DB_API_KEY;
-    public static int displayScreenHeight = 0;
-    private static final String SAVED_SEARCH_CRITERIA = "searchCriteria";
+    private static final int GRID_SPAN_COUNT_LAND = 3;
+    private static final int GRID_IMAGE_RATIO_LAND = 1;
 
+    public static int displayScreenHeight = 0;
+    private static final String LOADER_SEARCH_CRITERIA_EXTRA = "searchCriteria";
+    private static final int MOVIE_LOADER_ID = 7;
+    private static final String LOADER_QUERY_EXTRA = "extra_data";
+
+
+    public static List<Integer> mFavoriteMovieIds = new ArrayList<>();
+    private static List<Movie> mFavoriteMovies = new ArrayList<>();
 
     private RecyclerView mRecyclerView;
-    private MovieAdapter mMovieAdapter;
-    private TextView mErrorMessageTv;
-    private ProgressBar mProgressBarPb;
     private String mSearchCriteria;
+    ActivityMainBinding mDataBinding;
+    private MovieAdapter mMovieAdapter;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        //setContentView(R.layout.activity_main);
+        mDataBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.rv_recycler_view);
-
-        int viewHolderHeight = getCalculatedHeight(GRID_IMAGE_RATIO);
+        int imageRatio = GRID_IMAGE_RATIO;
+        int spanCount = GRID_SPAN_COUNT;
+        int orientation = getResources().getConfiguration().orientation;
+        if(orientation == Configuration.ORIENTATION_LANDSCAPE){
+            spanCount = GRID_SPAN_COUNT_LAND;
+            imageRatio = GRID_IMAGE_RATIO_LAND;
+        }
+        int viewHolderHeight = getCalculatedHeight(imageRatio);
         mMovieAdapter = new MovieAdapter(this,viewHolderHeight);
-        mErrorMessageTv = (TextView) findViewById(R.id.tv_error_message);
-        mProgressBarPb = (ProgressBar) findViewById(R.id.pb_loading);
 
 
-        GridLayoutManager layoutManager = new GridLayoutManager(this,GRID_SPAN_COUNT);
+
+        GridLayoutManager layoutManager = new GridLayoutManager(this,spanCount);
         layoutManager.setReverseLayout(false);
         layoutManager.setOrientation(GridLayoutManager.VERTICAL);
 
+        mRecyclerView = mDataBinding.rvRecyclerView;
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setAdapter(mMovieAdapter);
         mRecyclerView.setHasFixedSize(true);
 
-        mSearchCriteria = "popular";
+        mSearchCriteria = getString(R.string.search_popular);
+        getFavourites();
+        loadMovieData(mSearchCriteria,false );
 
-        Log.v(TAG, "::::::::::calling onCreate" );
-
-        if(savedInstanceState != null)
-        {
-            mSearchCriteria = savedInstanceState.getString(SAVED_SEARCH_CRITERIA);
-            Log.v(TAG, "::::::::::received savedInstanceState as : " + mSearchCriteria);
-        }
-        else{
-            Log.v(TAG, "::::::::::savedInstanceState status is null" );
-        }
-        loadMovieData(mSearchCriteria);
 
     }
 
@@ -88,6 +100,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     {
         /*the display matrix code is copied from stackOverflow
         */
+
 
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
@@ -101,21 +114,37 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     }
 
 
-    private void loadMovieData(String searchCriteria)
+    private void loadMovieData(String searchCriteria, boolean restartLoader)
     {
         showMovieView();
-        new FetchMovieTask().execute(searchCriteria);
+        String searchQuery = NetworkUtils.buildUrl(searchCriteria);
+        //Log.v(TAG, ":::::::::::::::::::searchQuery in loadMovieData:" + searchQuery);
+        Bundle bundle = new Bundle();
+        bundle.putString(LOADER_QUERY_EXTRA, searchQuery);
+        bundle.putString(LOADER_SEARCH_CRITERIA_EXTRA, searchCriteria);
+        LoaderManager loaderManager = getSupportLoaderManager();
+        Loader<List<Movie>> loader = loaderManager.getLoader(MOVIE_LOADER_ID);
+        if(restartLoader)
+        {
+            loaderManager.restartLoader(MOVIE_LOADER_ID, bundle, this);
+        }
+        else{
+            loaderManager.initLoader(MOVIE_LOADER_ID, bundle, this);
+        }
+
     }
+
+
 
     private void showErrorMessage()
     {
         mRecyclerView.setVisibility(View.INVISIBLE);
-        mErrorMessageTv.setVisibility(View.VISIBLE);
+        mDataBinding.tvErrorMessage.setVisibility(View.VISIBLE);
     }
 
     private void showMovieView()
     {
-        mErrorMessageTv.setVisibility(View.INVISIBLE);
+        mDataBinding.tvErrorMessage.setVisibility(View.INVISIBLE);
         mRecyclerView.setVisibility(View.VISIBLE);
     }
 
@@ -126,57 +155,96 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         Class destination = DetailActivity.class;
         Intent intent = new Intent(this,destination);
         intent.putExtra(getString(R.string.intent_package_key), movie );
+        intent.putExtra(getString(R.string.intent_package_search_by_key),mSearchCriteria);
         startActivity(intent);
     }
 
-    public class FetchMovieTask extends AsyncTask<String, Void, List<Movie>>
-    {
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            mProgressBarPb.setVisibility(View.VISIBLE);
-        }
+    @NonNull
+    @Override
+    public Loader<List<Movie>> onCreateLoader(int id, @Nullable final Bundle args) {
 
-        @Override
-        protected List<Movie> doInBackground(String... strings) {
+        return new AsyncTaskLoader<List<Movie>>(this) {
 
+            List<Movie> mCachedMovieList = null;
 
-            if(strings.length == 0)
-                return null;
+            @Override
+            protected void onStartLoading() {
+                super.onStartLoading();
+                if (args == null) {
+                    return;
+                }
 
-            List<Movie> movieList;
+                String searchBy = args.getString(LOADER_SEARCH_CRITERIA_EXTRA);
+                if(searchBy.equals(getString(R.string.search_favorite)))
+                {
+                    mCachedMovieList = mFavoriteMovies;
+                }
+               if (mCachedMovieList != null) {
+                    deliverResult(mCachedMovieList);
 
-            URL movieUrl = NetworkUtils.buildUrl(strings[0], API_KEY);
-            try {
-                String movieResponse = NetworkUtils.getResponseFromHttpUrl(movieUrl);
-                // Log.v(TAG, "--------------------------received movies data :" + movieResponse);
-
-                movieList = JsonUtils.parseMovieJsonData(movieResponse);
-                //Log.v(TAG, "--------------------------received movies array, length :" + movieList.size());
-                return movieList;
-
-            } catch (IOException |JSONException e) {
-                e.printStackTrace();
-                return null;
+                } else {
+                    mDataBinding.pbLoading.setVisibility(View.VISIBLE);
+                    forceLoad();
+                }
             }
 
+            @Override
+            public void deliverResult(@Nullable List<Movie> data) {
 
-        }
-
-        @Override
-        protected void onPostExecute(List<Movie> movies) {
-
-            mProgressBarPb.setVisibility(View.INVISIBLE);
-            if(movies!= null) {
-                showMovieView();
-                mMovieAdapter.setmMovieList(movies);
-                //Log.v(TAG, "-----------------------" + "recyclerView visibility =" + mRecyclerView.getVisibility());
-            }else{
-                showErrorMessage();
+                mCachedMovieList = data;
+                super.deliverResult(data);
             }
-            super.onPostExecute(movies);
-        }
+
+            @Nullable
+            @Override
+            public List<Movie> loadInBackground() {
+
+                List<Movie> movieList;
+
+                String searchQueryStr = (String) args.get(LOADER_QUERY_EXTRA);
+                URL movieUrl = null;
+
+                try {
+                    movieUrl = new URL(searchQueryStr);
+
+                    String movieResponse = NetworkUtils.getResponseFromHttpUrl(movieUrl);
+                    //Log.v(TAG, "--------------------------movie url :" + searchQueryStr);
+
+                    movieList = JsonUtils.parseMovieJsonData(movieResponse);
+                    //Log.v(TAG, "--------------------------received movies array, length :" + movieList.size());
+                    return movieList;
+
+                } catch (IOException |JSONException e) {
+                    e.printStackTrace();
+                    return null;
+                }
+
+            }
+        };
+
     }
+
+    @Override
+    public void onLoadFinished(@NonNull Loader<List<Movie>> loader, List<Movie> data) {
+
+        mDataBinding.pbLoading.setVisibility(View.INVISIBLE);
+        if(data!= null) {
+            showMovieView();
+            mMovieAdapter.setmMovieList(data);
+
+        }else{
+            showErrorMessage();
+        }
+
+    }
+
+    @Override
+    public void onLoaderReset(@NonNull Loader<List<Movie>> loader) {
+
+    }
+
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -192,17 +260,24 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         switch (item.getItemId())
         {
             case R.id.action_popular:
-                //Log.v(TAG,"::::::::::::::popular menu selected");
+               // Log.v(TAG,"::::::::::::::popular menu selected");
                 mMovieAdapter.setmMovieList(null);
-                mSearchCriteria = "popular";
-                loadMovieData(mSearchCriteria);
+                mSearchCriteria = getString(R.string.search_popular);
+                loadMovieData(mSearchCriteria, true);
                 return true;
 
                 case R.id.action_rated:
-                //Log.v(TAG,"::::::::::::::top rated menu selected");
+               // Log.v(TAG,"::::::::::::::top rated menu selected");
                 mMovieAdapter.setmMovieList(null);
-                mSearchCriteria = "top_rated";
-                loadMovieData(mSearchCriteria);
+                mSearchCriteria = getString(R.string.search_top_rated);
+                loadMovieData(mSearchCriteria, true);
+                return true;
+
+            case R.id.action_favorite:
+                mMovieAdapter.setmMovieList(null);
+                mSearchCriteria = getString(R.string.search_favorite);
+                //getFavourites();
+                loadMovieData(mSearchCriteria, true);
                 return true;
 
                 default: return super.onOptionsItemSelected(item);
@@ -210,18 +285,38 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
     }
 
-    @Override
-    protected void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putString(SAVED_SEARCH_CRITERIA, mSearchCriteria);
-        Log.v(TAG, ":::::::::outState search criteria saved as : " + mSearchCriteria);
+    private void getFavourites(){
+
+      ViewModelProvider.Factory factory = ViewModelProvider.AndroidViewModelFactory.getInstance(getApplication());
+        ViewModelProvider provider = new ViewModelProvider(this, factory);
+        final FavoriteMoviesViewModel viewModel = provider.get(FavoriteMoviesViewModel.class);
+        viewModel.getFavMovieList().observe(this, new Observer<List<Movie>>() {
+            @Override
+            public void onChanged(List<Movie> movies) {
+                mFavoriteMovies = movies;
+                //Log.v(TAG, ":::::::::::::::inside LiveData observer");
+
+                createFavMovieList(movies);
+
+                String ids = "";
+                for(int a: mFavoriteMovieIds)
+                    ids += a + ",";
+                //Log.v(TAG, "fav movie ids inside observer: " + ids );
+                if(mSearchCriteria.equals(getString(R.string.search_favorite))) {
+                    loadMovieData(mSearchCriteria, true);
+                }
+            }
+        });
     }
 
-    //    @Override
-//    protected void onSaveInstanceState(Bundle outState) {
-//
-//        super.onSaveInstanceState(outState);
-//        outState.putString(SAVED_SEARCH_CRITERIA, mSearchCriteria);
-//        Log.v(TAG, ":::::::::outState search criteria saved as : " + mSearchCriteria);
-//    }
+
+    private void createFavMovieList(List<Movie> movies)
+    {
+        mFavoriteMovieIds.clear();
+        for(Movie m: movies){
+            mFavoriteMovieIds.add(m.getMovieId());
+        }
+    }
+
+
 }

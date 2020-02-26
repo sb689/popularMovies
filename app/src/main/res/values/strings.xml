@@ -1,10 +1,36 @@
 <resources>
     <string name="app_name">Popular Movies</string>
+
+<!--    MainActivity related string-->
     <string name="network_error_message">An error has occurred. Please try later.</string>
     <string name="menu_popular">Popular</string>
     <string name="menu_top_rated">Highest rated</string>
-    <string name="image_view_desc">Shows movie poster</string>
+    <string name="menu_favorite">Favorite</string>
+
     <string name="search_popular">popular</string>
     <string name="search_top_rated">top_rated</string>
+    <string name="search_favorite">favorite</string>
+
     <string name="intent_package_key">Movie</string>
+    <string name="intent_package_search_by_key">search_by</string>
+
+<!--    DetailActivity related strings-->
+    <string name="image_view_desc">Shows movie poster</string>
+    <string name="favourite_button_label">MARK AS\nFAVORITE</string>
+    <string name="divider_content_desc">movie trailer section </string>
+    <string name="trailer_play_button_content_desc">tap to play movie trailer</string>
+    <string name="trailer_group_label">Trailers</string>
+    <string name="review_group_label">Reviews</string>
+    <string name="added_to_favorite">Added to favorites</string>
+    <string name="removed_from_favorite">Removed from favorites</string>
+    <string name="menu_share_trailer">Share trailer</string>
+    <string name="share_trailer_title">Shared movie trailer</string>
+    <string name="share_trailer_error_msg">Trailer not available, Please try later</string>
+    <string name="network_error_message_trailer_review">An error has occurred. Not able to load trailer and review. Please try later.</string>
+    <string name="trailer_no_text_view">Trailer %1s</string>
+
+<!--    Trailers-->
+    <string name="trailer_label">Trailer %s</string>
+
+
 </resources>

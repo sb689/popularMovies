@@ -10,6 +10,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 
+import com.example.android.popularMovies.databinding.MovieGridItemBinding;
+import com.example.android.popularMovies.databinding.MovieReviewItemBinding;
 import com.example.android.popularMovies.model.Movie;
 import com.example.android.popularMovies.utilities.NetworkUtils;
 import com.squareup.picasso.Picasso;
@@ -48,8 +50,8 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
         public MovieViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
             LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
-            View view = layoutInflater.inflate(R.layout.movie_grid_item, parent, false);
-            return new MovieViewHolder(view);
+            MovieGridItemBinding itemBinding = MovieGridItemBinding.inflate(layoutInflater,parent,false);
+            return new MovieViewHolder( itemBinding);
         }
 
         @Override
@@ -78,20 +80,20 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
         public class MovieViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
 
-            public final ImageView mMoviePosterIv;
+            private final MovieGridItemBinding mDataBinding;
 
-            public MovieViewHolder(@NonNull View itemView) {
+            public MovieViewHolder(@NonNull MovieGridItemBinding binging) {
 
-                super(itemView);
-                mMoviePosterIv = (ImageView) itemView.findViewById(R.id.iv_movie_poster);
-                mMoviePosterIv.getLayoutParams().height = mViewHolderItemHeight;
-                itemView.setOnClickListener(this);
-                //Picasso.with(itemView.getContext()).load("").into(mMoviePosterIv);
+                super(binging.getRoot());
+                mDataBinding = binging;
+                mDataBinding.ivMoviePoster.getLayoutParams().height = mViewHolderItemHeight;
+                binging.getRoot().setOnClickListener(this);
+
             }
 
             void bindMoviePosterPath(Uri posterPath) {
                 if (posterPath != null) {
-                    Picasso.get().load(posterPath).into(mMoviePosterIv);
+                    Picasso.get().load(posterPath).into(mDataBinding.ivMoviePoster);
 
                 }
             }

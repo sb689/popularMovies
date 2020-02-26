@@ -3,14 +3,21 @@ package com.example.android.popularMovies.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
+@Entity
 public class Movie implements Parcelable {
 
+
+    @PrimaryKey
     private int movieId;
     private String originalTitle;
     private String overview;
     private double voteAverage;
     private String releaseDate;
     private String posterPath;
+
 
     public String getPosterPath() {
         return posterPath;
@@ -78,6 +85,7 @@ public class Movie implements Parcelable {
         dest.writeDouble(voteAverage);
         dest.writeString(releaseDate);
         dest.writeString(posterPath);
+
     }
 
 
@@ -89,6 +97,7 @@ public class Movie implements Parcelable {
         this.voteAverage = parcel.readDouble();
         this.releaseDate = parcel.readString();
         this.posterPath = parcel.readString();
+
     }
 
     public static final Parcelable.Creator<Movie> CREATOR = new Parcelable.Creator<Movie>(){

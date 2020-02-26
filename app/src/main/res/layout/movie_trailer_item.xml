@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.0016583748" />
+
+
+    <ImageButton
+        android:id="@+id/button_trailer_play"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="56dp"
+        android:layout_marginLeft="56dp"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/ic_play_arrow_24px"
+        android:contentDescription="@string/trailer_play_button_content_desc"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/guideline2" />
+
+    <TextView
+        android:id="@+id/tv_trailer_no_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="25dp"
+        android:layout_marginLeft="25dp"
+        android:textSize="15sp"
+        app:layout_constraintBottom_toBottomOf="@+id/button_trailer_play"
+        app:layout_constraintStart_toEndOf="@+id/button_trailer_play"
+        app:layout_constraintTop_toTopOf="@+id/button_trailer_play"
+        tools:text="Trailer" />
+
+    <ImageView
+        android:id="@+id/iv_divider1"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/detail_layout_divider"
+        android:contentDescription="@string/divider_content_desc"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/button_trailer_play"
+        android:layout_marginTop="10dp"
+        />
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

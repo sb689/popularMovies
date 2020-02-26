@@ -16,5 +16,11 @@
         android:orderInCategory="2"
         app:showAsAction="never"/>
 
+    <item
+        android:id="@+id/action_favorite"
+        android:title="@string/menu_favorite"
+        android:orderInCategory="3"
+        app:showAsAction="never" />
+
 
 </menu>
