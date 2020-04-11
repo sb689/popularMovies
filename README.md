@@ -6,11 +6,7 @@ This android application shows list of movies from movieDbApi. Movie list can be
 - Allow user to change sort order via a setting:
 The sort order can be by most popular or by highest-rated or favorites
 - Allow the user to tap on a movie poster and transition to a details screen with additional information such as:
-original title
-movie poster image thumbnail
-A plot synopsis (called overview in the api)
-user rating (called vote_average in the api)
-release date
+original title, movie poster image thumbnail, A plot synopsis (called overview in the api), user rating (called vote_average in the api), release date
 - Allow users to view and play trailers (either in the youtube app or a web browser).
 - Allow users to read reviews of a selected movie.
 - Allow users to mark a movie as a favorite in the details view by tapping a button.
