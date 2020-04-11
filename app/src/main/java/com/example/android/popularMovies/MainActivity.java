@@ -18,6 +18,7 @@ import android.os.Bundle;
 import android.util.DisplayMetrics;
 
 import android.util.Log;
+import android.view.Display;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -64,7 +65,7 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_main);
+
         mDataBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
 
         int imageRatio = GRID_IMAGE_RATIO;
@@ -77,9 +78,11 @@ public class MainActivity extends AppCompatActivity implements
         int viewHolderHeight = getCalculatedHeight(imageRatio);
         mMovieAdapter = new MovieAdapter(this,viewHolderHeight);
 
+        //int posterWidth = 230; // size in pixels (just a random size). You may use other values.
 
+        //GridLayoutManager layoutManager =new GridLayoutManager(this, calculateBestSpanCount(posterWidth));
 
-        GridLayoutManager layoutManager = new GridLayoutManager(this,spanCount);
+        GridLayoutManager layoutManager = new GridLayoutManager(this, spanCount);
         layoutManager.setReverseLayout(false);
         layoutManager.setOrientation(GridLayoutManager.VERTICAL);
 
@@ -96,11 +99,20 @@ public class MainActivity extends AppCompatActivity implements
     }
 
 
+
+    //result of using this method was bad. count on pixel to calculate image size is a bad idea.
+    private int calculateBestSpanCount(int posterWidth) {
+        Display display = getWindowManager().getDefaultDisplay();
+        DisplayMetrics outMetrics = new DisplayMetrics();
+        display.getMetrics(outMetrics);
+        float screenWidth = outMetrics.widthPixels;
+        return Math.round(screenWidth / posterWidth);
+    }
+
     private int getCalculatedHeight(int divBy)
     {
         /*the display matrix code is copied from stackOverflow
         */
-
 
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
@@ -208,7 +220,7 @@ public class MainActivity extends AppCompatActivity implements
                     movieUrl = new URL(searchQueryStr);
 
                     String movieResponse = NetworkUtils.getResponseFromHttpUrl(movieUrl);
-                    //Log.v(TAG, "--------------------------movie url :" + searchQueryStr);
+                   // Log.v(TAG, "--------------------------movie url :" + movieResponse);
 
                     movieList = JsonUtils.parseMovieJsonData(movieResponse);
                     //Log.v(TAG, "--------------------------received movies array, length :" + movieList.size());

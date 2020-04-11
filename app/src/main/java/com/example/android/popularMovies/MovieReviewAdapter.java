@@ -39,7 +39,6 @@ public class MovieReviewAdapter extends RecyclerView.Adapter<MovieReviewAdapter.
     public void onBindViewHolder(@NonNull ReviewHolder holder, int position) {
 
         holder.bindData();
-
     }
 
     @Override

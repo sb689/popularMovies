@@ -61,10 +61,10 @@ public class DetailActivity extends AppCompatActivity implements MovieTrailerAda
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        ActionBar actionBar = getSupportActionBar();
-        if(actionBar!= null){
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
+//        ActionBar actionBar = getSupportActionBar();
+//        if(actionBar!= null){
+//            actionBar.setDisplayHomeAsUpEnabled(true);
+//        }
         mDatabase = AppDatabase.getInstance(getApplicationContext());
         mDataBinding = DataBindingUtil.setContentView(this,
                 R.layout.activity_detail);
