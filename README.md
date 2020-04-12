@@ -1,5 +1,5 @@
 ## Project Overview
-This android application shows list of movies from movieDbApi. Movie list can be categorized as higest rating movies, popular movies and favorite movies. Selecting a movie from the gridview will display details of a movie. User can add/remove a movie from favorite list.
+This android application shows a list of movies from movieDbApi. Movies can be categorized as the highest rating movies, popular movies, and favorite movies. Selecting a movie from the grid view will display details of a movie. Users can add/remove a movie from the favorite list. Developed as part of Udacity Android nanodegree program
 
 ## Requirements
 - Present the user with a grid arrangement of movie posters upon launch.
@@ -10,7 +10,7 @@ original title, movie poster image thumbnail, A plot synopsis (called overview i
 - Allow users to view and play trailers (either in the youtube app or a web browser).
 - Allow users to read reviews of a selected movie.
 - Allow users to mark a movie as a favorite in the details view by tapping a button.
-- Use Android Architecture Components (Room, LiveData, ViewModel and Lifecycle) to create a robust an efficient application.
+- Use Android Architecture Components (Room, LiveData, ViewModel and Lifecycle) to create a robust and efficient application.
 - Create a database using Room to store the names and ids of the user's favorite movies (and optionally, the rest of the information needed to display their favorites collection while offline).
 
 ## Why this Project?
@@ -22,7 +22,9 @@ By building this app, you will demonstrate your understanding of the foundationa
 - Fetch data from the Internet with theMovieDB API.
 - Use adapters and custom list layouts to populate list views.
 - Incorporate libraries to simplify the amount of code you need to write
-- Build a fully featured application that looks and feels natural on the latest Android operating system.
+- Build a fully-featured application that looks and feels natural on the latest Android operating system.
 
 ### Note
-To run this app please create your API key following the link: https://www.themoviedb.org/documentation/api. Then save the api key in gradle.properties file using key MOVIE_DB_API_KEY, then build and run the application. 
+To run this app please create your API key following the link: https://www.themoviedb.org/documentation/api. Save the api key in gradle.properties file using key MOVIE_DB_API_KEY. Build and run the application. 
+
+
