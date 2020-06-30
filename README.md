@@ -2,14 +2,14 @@
 
 <table>
   <tr>
-    <td style="padding:10px">Main Screen</td>
-     <td style="padding:10px">Detail Screen</td>
-     <td style="padding:10px">Main screen with menu</td>
+    <td style="padding:30px">Main Screen</td>
+     <td style="padding:30px">Detail Screen</td>
+     <td style="padding:30px">Main screen with menu</td>
   </tr>
   <tr>
-    <td style="padding:10px"><img src="/screenshots/Screenshot_1593541479.png" width=270 height=480></td>
-    <td style="padding:10px"><img src="/screenshots/Screenshot_1593542484.png" width=270 height=480></td>
-    <td style="padding:10px"><img src="/screenshots/Screenshot_1593542507.png" width=270 height=480></td>
+    <td style="padding:30px"><img src="/screenshots/Screenshot_1593541479.png" width=270 height=480></td>
+    <td style="padding:30px"><img src="/screenshots/Screenshot_1593542484.png" width=270 height=480></td>
+    <td style="padding:30px"><img src="/screenshots/Screenshot_1593542507.png" width=270 height=480></td>
   </tr>
  </table>
 
