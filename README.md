@@ -1,3 +1,7 @@
+## Screenshots of the application
+
+![Alt text](/screenshots/Screenshot_1593541479.png?raw=true "main_screen")
+
 ## Project Overview
 This android application shows a list of movies from movieDbApi. Movies can be categorized as the highest rating movies, popular movies, and favorite movies. Selecting a movie from the grid view will display details of a movie. Users can add/remove a movie from the favorite list. Developed as part of Udacity Android nanodegree program
 
