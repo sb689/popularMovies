@@ -1,10 +1,18 @@
 ## Screenshots of the application
 
-![Alt text](/screenshots/Screenshot_1593541479.png?raw=true "main_screen")
+<table>
+  <tr>
+    <td>Main Screen</td>
+     <td>Detail Screen</td>
+     <td>Main screen with menu</td>
+  </tr>
+  <tr>
+    <td><img src="/screenshots/Screenshot_1593541479.png" width=270 height=480></td>
+    <td><img src="/screenshots/Screenshot_1593542484.png" width=270 height=480></td>
+    <td><img src="/screenshots/Screenshot_1593542507.png" width=270 height=480></td>
+  </tr>
+ </table>
 
-![Alt text](/screenshots/Screenshot_1593542484.png?raw=true "detail_screen")
-
-![Alt text](/screenshots/Screenshot_1593542507.png?raw=true "main_screen_with_menu_inflated")
 
 
 ## Project Overview
