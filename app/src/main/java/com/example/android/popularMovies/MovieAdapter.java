@@ -1,6 +1,7 @@
 package com.example.android.popularMovies;
 
 import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -100,8 +101,8 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
 
             @Override
             public void onClick(View v) {
-
                 int position = getAdapterPosition();
+                Log.d(TAG, ":::::::::::  inside MovieViewHolder onClick received");
                 mAdapterListener.movieAdapterOnClick(position);
             }
 

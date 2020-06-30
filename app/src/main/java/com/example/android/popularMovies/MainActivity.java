@@ -220,7 +220,7 @@ public class MainActivity extends AppCompatActivity implements
                     movieUrl = new URL(searchQueryStr);
 
                     String movieResponse = NetworkUtils.getResponseFromHttpUrl(movieUrl);
-                   // Log.v(TAG, "--------------------------movie url :" + movieResponse);
+                   Log.v(TAG, "--------------------------movie url :" + movieResponse);
 
                     movieList = JsonUtils.parseMovieJsonData(movieResponse);
                     //Log.v(TAG, "--------------------------received movies array, length :" + movieList.size());
