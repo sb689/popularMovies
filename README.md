@@ -42,6 +42,8 @@ By building this app, you will demonstrate your understanding of the foundationa
 - Build a fully-featured application that looks and feels natural on the latest Android operating system.
 
 ### Note
-To run this app please create your API key following the link: https://www.themoviedb.org/documentation/api. Save the api key in gradle.properties file using key MOVIE_DB_API_KEY. Build and run the application. 
+To run this app please create your API key following the link: https://www.themoviedb.org/documentation/api. Save the api key in values/secrets.xml file using 
+ <string name="MOVIE_DB_API_KEY">Your API key</string>
+ Build and run the application. 
 
 
