@@ -1,5 +1,6 @@
 package com.example.android.popularMovies.movieDetailInfo;
 
+import android.content.Context;
 import android.util.Log;
 
 import com.example.android.popularMovies.DetailActivity;
@@ -21,11 +22,11 @@ public class MovieExtraInfo {
 
 
 
-    public static List<Review> fetchMovieReviews(int movieId) throws IOException, JSONException{
+    public static List<Review> fetchMovieReviews(int movieId, Context context) throws IOException, JSONException{
 
         List<Review> reviewList;
 
-            String reviewUriStr = NetworkUtils.buildExtraInfoUri(movieId, DetailActivity.ACTION_GET_REVIEWS);
+            String reviewUriStr = NetworkUtils.buildExtraInfoUri(movieId, DetailActivity.ACTION_GET_REVIEWS, context);
             URL reviewUrl = new URL(reviewUriStr);
 
             String response = NetworkUtils.getResponseFromHttpUrl(reviewUrl);
@@ -39,12 +40,12 @@ public class MovieExtraInfo {
     }
 
 
-    public static List<Trailer> fetchMovieTrailers(int movieId) throws IOException, JSONException {
+    public static List<Trailer> fetchMovieTrailers(int movieId, Context context) throws IOException, JSONException {
 
         List<Trailer> trailerList;
 
 
-            String trailerUriStr = NetworkUtils.buildExtraInfoUri(movieId, DetailActivity.ACTION_GET_TRAILERS);
+            String trailerUriStr = NetworkUtils.buildExtraInfoUri(movieId, DetailActivity.ACTION_GET_TRAILERS, context);
             URL trailerUrl = new URL(trailerUriStr);
 
             String response = NetworkUtils.getResponseFromHttpUrl(trailerUrl);

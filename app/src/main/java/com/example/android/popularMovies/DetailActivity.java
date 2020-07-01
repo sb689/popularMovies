@@ -192,7 +192,7 @@ public class DetailActivity extends AppCompatActivity implements MovieTrailerAda
         public List<Trailer> loadInBackground() {
             List<Trailer> trailers = null;
             try {
-                trailers = MovieExtraInfo.fetchMovieTrailers(mMovie.getMovieId());
+                trailers = MovieExtraInfo.fetchMovieTrailers(mMovie.getMovieId(), getContext());
             }
             catch (IOException |JSONException e) {
                 e.printStackTrace();
@@ -238,7 +238,7 @@ public class DetailActivity extends AppCompatActivity implements MovieTrailerAda
         public List<Review> loadInBackground() {
             List<Review> reviews = null;
             try {
-                reviews = MovieExtraInfo.fetchMovieReviews(mMovie.getMovieId());
+                reviews = MovieExtraInfo.fetchMovieReviews(mMovie.getMovieId(), getContext());
 
             }  catch (IOException |JSONException e) {
                 e.printStackTrace();

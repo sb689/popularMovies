@@ -12,6 +12,7 @@ import androidx.loader.content.Loader;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -129,7 +130,7 @@ public class MainActivity extends AppCompatActivity implements
     private void loadMovieData(String searchCriteria, boolean restartLoader)
     {
         showMovieView();
-        String searchQuery = NetworkUtils.buildUrl(searchCriteria);
+        String searchQuery = NetworkUtils.buildUrl(searchCriteria, MainActivity.this);
         //Log.v(TAG, ":::::::::::::::::::searchQuery in loadMovieData:" + searchQuery);
         Bundle bundle = new Bundle();
         bundle.putString(LOADER_QUERY_EXTRA, searchQuery);
