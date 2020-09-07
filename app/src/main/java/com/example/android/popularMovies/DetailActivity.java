@@ -48,7 +48,7 @@ public class DetailActivity extends AppCompatActivity implements MovieTrailerAda
 
     private static Movie mMovie;
     private static AppDatabase mDatabase;
-    static ActivityDetailBinding mDataBinding;
+    private static ActivityDetailBinding mDataBinding;
     private Toast mToast;
 
     private int mFavButtonState;
@@ -123,21 +123,7 @@ public class DetailActivity extends AppCompatActivity implements MovieTrailerAda
 
     private void bindDataToView(){
 
-
-
-//        int deviceOrientation = getResources().getConfiguration().orientation;
-//        int imageRatio = IMAGE_HEIGHT_RATIO;
-//        int titleRatio = TITLE_HEIGHT_RATIO;
-//
-//        if(deviceOrientation == Configuration.ORIENTATION_LANDSCAPE){
-//            imageRatio = IMAGE_HEIGHT_RATION_LAND;
-//            mDataBinding.tvDetailMovieTitle.setTextSize(16);
-//            titleRatio = TITLE_HEIGHT_RATION_LAND;
-//        }
-
-        //int titleHeight = (int) MainActivity.displayScreenHeight/ titleRatio;
         mDataBinding.tvDetailMovieTitle.setText(mMovie.getOriginalTitle());
-        //mDataBinding.tvDetailMovieTitle.getLayoutParams().height = titleHeight;
 
         String releaseDateStr = mMovie.getReleaseDate();
         if(releaseDateStr != null || !releaseDateStr.isEmpty()) {
@@ -152,7 +138,6 @@ public class DetailActivity extends AppCompatActivity implements MovieTrailerAda
 
         //setting poster
 
-       // mDataBinding.ivDetailPoster.getLayoutParams().height = (int) MainActivity.displayScreenHeight/imageRatio;
         String posterPath = mMovie.getPosterPath();
         Uri posterUri = NetworkUtils.buildMoviePosterUrl(posterPath);
         //Log.v(TAG, "::::::::::::::::::posterPath uri is:" + posterUri.toString());
@@ -382,4 +367,21 @@ public class DetailActivity extends AppCompatActivity implements MovieTrailerAda
                     .startChooser();
 
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        mMovieTrailerAdapter.setmTrailerList(null);
+        mMovieReviewAdapter.setmReviewList(null);
+        mDataBinding.rvTrailers.setAdapter(null);
+        mDataBinding.rvReviews.setAdapter(null);
+        mMovieTrailerAdapter = null;
+        mMovieReviewAdapter = null;
+        mMovie = null;
+        mDataBinding = null;
+
+
+    }
+
 }

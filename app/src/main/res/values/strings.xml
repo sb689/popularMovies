@@ -7,9 +7,9 @@
     <string name="menu_top_rated">Highest rated</string>
     <string name="menu_favorite">Favorite</string>
 
-    <string name="search_popular">popular</string>
-    <string name="search_top_rated">top_rated</string>
-    <string name="search_favorite">favorite</string>
+<!--    <string name="search_popular">popular</string>-->
+<!--    <string name="search_top_rated">top_rated</string>-->
+<!--    <string name="search_favorite">favorite</string>-->
 
     <string name="intent_package_key">Movie</string>
     <string name="intent_package_search_by_key">search_by</string>

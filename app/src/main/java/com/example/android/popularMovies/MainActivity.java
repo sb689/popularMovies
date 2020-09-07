@@ -57,9 +57,13 @@ public class MainActivity extends AppCompatActivity implements
     public static List<Integer> mFavoriteMovieIds = new ArrayList<>();
     private static List<Movie> mFavoriteMovies = new ArrayList<>();
 
+    private static final String SEARCH_POPULAR = "popular";
+    private static final String SEARCH_TOP_RATED = "top_rated";
+    private static final String SEARCH_FAVORITE = "favorite";
+
     private RecyclerView mRecyclerView;
     private String mSearchCriteria;
-    ActivityMainBinding mDataBinding;
+    private static ActivityMainBinding mDataBinding;
     private MovieAdapter mMovieAdapter;
 
 
@@ -92,7 +96,7 @@ public class MainActivity extends AppCompatActivity implements
         mRecyclerView.setAdapter(mMovieAdapter);
         mRecyclerView.setHasFixedSize(true);
 
-        mSearchCriteria = getString(R.string.search_popular);
+        mSearchCriteria = SEARCH_POPULAR;
         getFavourites();
         loadMovieData(mSearchCriteria,false );
 
@@ -172,68 +176,74 @@ public class MainActivity extends AppCompatActivity implements
         startActivity(intent);
     }
 
+    private static class FetchMovies extends AsyncTaskLoader<List<Movie>>{
+
+        List<Movie> mCachedMovieList = null;
+        String mSearchBy = "";
+        String mSearchQuery = "";
+
+        public FetchMovies(@NonNull Context context, String searchCriteria, String searchQuery) {
+            super(context);
+            mSearchBy = searchCriteria;
+            mSearchQuery = searchQuery;
+        }
+
+        @Override
+        protected void onStartLoading() {
+            super.onStartLoading();
+
+            if(mSearchBy.equals(SEARCH_FAVORITE))
+            {
+                mCachedMovieList = mFavoriteMovies;
+            }
+            if (mCachedMovieList != null) {
+                deliverResult(mCachedMovieList);
+
+            } else {
+                mDataBinding.pbLoading.setVisibility(View.VISIBLE);
+                forceLoad();
+            }
+        }
+
+        @Override
+        public void deliverResult(@Nullable List<Movie> data) {
+
+            mCachedMovieList = data;
+            super.deliverResult(data);
+        }
+
+        @Nullable
+        @Override
+        public List<Movie> loadInBackground() {
+
+            List<Movie> movieList;
+            URL movieUrl = null;
+
+            try {
+                movieUrl = new URL(mSearchQuery);
+
+                String movieResponse = NetworkUtils.getResponseFromHttpUrl(movieUrl);
+                Log.v(TAG, "--------------------------movie url :" + movieResponse);
+
+                movieList = JsonUtils.parseMovieJsonData(movieResponse);
+                //Log.v(TAG, "--------------------------received movies array, length :" + movieList.size());
+                return movieList;
+
+            } catch (IOException |JSONException e) {
+                e.printStackTrace();
+                return null;
+            }
+
+        }
+    }
+
     @NonNull
     @Override
     public Loader<List<Movie>> onCreateLoader(int id, @Nullable final Bundle args) {
 
-        return new AsyncTaskLoader<List<Movie>>(this) {
-
-            List<Movie> mCachedMovieList = null;
-
-            @Override
-            protected void onStartLoading() {
-                super.onStartLoading();
-                if (args == null) {
-                    return;
-                }
-
-                String searchBy = args.getString(LOADER_SEARCH_CRITERIA_EXTRA);
-                if(searchBy.equals(getString(R.string.search_favorite)))
-                {
-                    mCachedMovieList = mFavoriteMovies;
-                }
-               if (mCachedMovieList != null) {
-                    deliverResult(mCachedMovieList);
-
-                } else {
-                    mDataBinding.pbLoading.setVisibility(View.VISIBLE);
-                    forceLoad();
-                }
-            }
-
-            @Override
-            public void deliverResult(@Nullable List<Movie> data) {
-
-                mCachedMovieList = data;
-                super.deliverResult(data);
-            }
-
-            @Nullable
-            @Override
-            public List<Movie> loadInBackground() {
-
-                List<Movie> movieList;
-
-                String searchQueryStr = (String) args.get(LOADER_QUERY_EXTRA);
-                URL movieUrl = null;
-
-                try {
-                    movieUrl = new URL(searchQueryStr);
-
-                    String movieResponse = NetworkUtils.getResponseFromHttpUrl(movieUrl);
-                   Log.v(TAG, "--------------------------movie url :" + movieResponse);
-
-                    movieList = JsonUtils.parseMovieJsonData(movieResponse);
-                    //Log.v(TAG, "--------------------------received movies array, length :" + movieList.size());
-                    return movieList;
-
-                } catch (IOException |JSONException e) {
-                    e.printStackTrace();
-                    return null;
-                }
-
-            }
-        };
+        return new FetchMovies(this,
+                args.getString(LOADER_SEARCH_CRITERIA_EXTRA),
+                args.getString(LOADER_QUERY_EXTRA));
 
     }
 
@@ -275,20 +285,20 @@ public class MainActivity extends AppCompatActivity implements
             case R.id.action_popular:
                // Log.v(TAG,"::::::::::::::popular menu selected");
                 mMovieAdapter.setmMovieList(null);
-                mSearchCriteria = getString(R.string.search_popular);
+                mSearchCriteria = SEARCH_POPULAR;
                 loadMovieData(mSearchCriteria, true);
                 return true;
 
                 case R.id.action_rated:
                // Log.v(TAG,"::::::::::::::top rated menu selected");
                 mMovieAdapter.setmMovieList(null);
-                mSearchCriteria = getString(R.string.search_top_rated);
+                mSearchCriteria = SEARCH_TOP_RATED;
                 loadMovieData(mSearchCriteria, true);
                 return true;
 
             case R.id.action_favorite:
                 mMovieAdapter.setmMovieList(null);
-                mSearchCriteria = getString(R.string.search_favorite);
+                mSearchCriteria = SEARCH_FAVORITE;
                 //getFavourites();
                 loadMovieData(mSearchCriteria, true);
                 return true;
@@ -297,6 +307,7 @@ public class MainActivity extends AppCompatActivity implements
         }
 
     }
+
 
     private void getFavourites(){
 
@@ -315,7 +326,7 @@ public class MainActivity extends AppCompatActivity implements
                 for(int a: mFavoriteMovieIds)
                     ids += a + ",";
                 //Log.v(TAG, "fav movie ids inside observer: " + ids );
-                if(mSearchCriteria.equals(getString(R.string.search_favorite))) {
+                if(mSearchCriteria.equals(SEARCH_FAVORITE)) {
                     loadMovieData(mSearchCriteria, true);
                 }
             }
@@ -331,5 +342,15 @@ public class MainActivity extends AppCompatActivity implements
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
 
+        mSearchCriteria = null;
+        mMovieAdapter = null;
+        mDataBinding.rvRecyclerView.setAdapter(null);
+        mRecyclerView = null;
+        mDataBinding = null;
+
+    }
 }

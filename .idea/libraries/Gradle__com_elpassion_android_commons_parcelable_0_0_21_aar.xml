@@ -1,8 +1,9 @@
 <component name="libraryTable">
   <library name="Gradle: com.elpassion.android.commons:parcelable:0.0.21@aar">
     <CLASSES>
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/6a18c69848629013938bd8c2fa070e9b/jetified-parcelable-0.0.21/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/6a18c69848629013938bd8c2fa070e9b/jetified-parcelable-0.0.21/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/7132b7f8fcfa555752798ac9869cc186/jetified-parcelable-0.0.21/AndroidManifest.xml" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/7132b7f8fcfa555752798ac9869cc186/jetified-parcelable-0.0.21/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/7132b7f8fcfa555752798ac9869cc186/jetified-parcelable-0.0.21/res" />
     </CLASSES>
     <JAVADOC>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.elpassion.android.commons/parcelable/0.0.21/3ba5ee71142d7770f94d2a654ab9cec42fb823a1/parcelable-0.0.21-javadoc.jar!/" />

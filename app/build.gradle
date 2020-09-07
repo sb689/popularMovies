@@ -59,4 +59,6 @@ dependencies {
     // Lifecycles only (without ViewModel or LiveData)
     implementation "androidx.lifecycle:lifecycle-runtime:$lifecycle_version"
 
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.4'
+
 }
